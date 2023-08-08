@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.model.PageDAO;
 import searchengine.model.SiteDAO;
-import searchengine.model.Status;
+import searchengine.model.enums.Status;
 import searchengine.repositories.PageRepository;
 import searchengine.repositories.SiteRepository;
-import searchengine.services.StatisticsService;
+import searchengine.services.statistics.StatisticsService;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 @RestController
@@ -45,7 +44,7 @@ public class ApiController {
         siteDAO.setUrl(url);
         siteRepository.save(siteDAO);
         try {
-            Connection connection = Jsoup.connect(url);
+            Connection connection = Jsoup.connect(url).timeout(10000);
             Document document = connection.get();
             PageDAO pageDAO = new PageDAO();
             pageDAO.setPath("/");
@@ -53,13 +52,15 @@ public class ApiController {
             pageDAO.setSite(siteDAO);
             siteDAO.setName(document.title());
             pageRepository.save(pageDAO);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            siteDAO.setStatus(Status.FAILED);
+            siteRepository.save(siteDAO);
             throw new RuntimeException(e);
         }
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println(1);
         }
         siteDAO.setStatusTime(LocalDateTime.now());
 
@@ -67,4 +68,16 @@ public class ApiController {
         siteRepository.save(siteDAO);
         return ResponseEntity.ok(true);
     }
+
+    @GetMapping("/startIndexing")
+    private boolean startIndexing(){
+        return false;
+    }
+
+    @GetMapping("/stopIndexing")
+    private boolean stopIndexing(){
+        return true;
+    }
+
+
 }

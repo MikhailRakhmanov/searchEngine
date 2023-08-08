@@ -3,6 +3,7 @@ package searchengine.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import searchengine.model.enums.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
