@@ -2,7 +2,6 @@ package searchengine.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import searchengine.config.Site;
 import searchengine.config.SitesList;
 import searchengine.dto.statistics.DetailedStatisticsItem;
 import searchengine.dto.statistics.StatisticsData;
@@ -19,17 +18,16 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final Random random = new Random();
     private final SitesList sites;
 
     @Override
     public StatisticsResponse getStatistics() {
-        String[] statuses = { "INDEXED", "FAILED", "INDEXING" };
-        String[] errors = {
-                "Ошибка индексации: главная страница сайта не доступна",
-                "Ошибка индексации: сайт не доступен",
-                ""
-        };
+//        String[] statuses = { "INDEXED", "FAILED", "INDEXING" };
+//        String[] errors = {
+//                "Ошибка индексации: главная страница сайта не доступна",
+//                "Ошибка индексации: сайт не доступен",
+//                ""
+//        };
 
         TotalStatistics total = new TotalStatistics();
         total.setSites(sites.getAllSites().size());
@@ -37,8 +35,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         List<DetailedStatisticsItem> detailed = new ArrayList<>();
         List<SiteDAO> sitesList = sites.getAllSites();
-        for(int i = 0; i < sitesList.size(); i++) {
-            SiteDAO site = sitesList.get(i);
+        for (SiteDAO site : sitesList) {
             DetailedStatisticsItem item = new DetailedStatisticsItem();
             int pages = site.getPages().size();
             int lemmas = 0;
