@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @RequestMapping("/api")
 public class ApiController {
     private final StatisticsService statisticsService;
-
     private final SiteRepository siteRepository;
     private final PageRepository pageRepository;
 
@@ -42,6 +41,8 @@ public class ApiController {
     public ResponseEntity<Boolean> indexingPage(@RequestParam String url) {
         SiteDAO siteDAO = new SiteDAO();
         siteDAO.setStatus(Status.INDEXING);
+        siteDAO.setStatusTime(LocalDateTime.now());
+        siteDAO.setUrl(url);
         siteRepository.save(siteDAO);
         try {
             Connection connection = Jsoup.connect(url);
@@ -49,13 +50,19 @@ public class ApiController {
             PageDAO pageDAO = new PageDAO();
             pageDAO.setPath("/");
             pageDAO.setContent(document.toString());
+            pageDAO.setSite(siteDAO);
             siteDAO.setName(document.title());
             pageRepository.save(pageDAO);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         siteDAO.setStatusTime(LocalDateTime.now());
-        siteDAO.setUrl(url);
+
         siteDAO.setStatus(Status.INDEXED);
         siteRepository.save(siteDAO);
         return ResponseEntity.ok(true);
