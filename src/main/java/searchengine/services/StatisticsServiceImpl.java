@@ -26,7 +26,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 //                "Ошибка индексации: сайт не доступен",
 //                ""
 //        };
-
         TotalStatistics total = new TotalStatistics();
         total.setSites(sites.getAllSites().size());
         total.setIndexing(true);
