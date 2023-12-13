@@ -25,9 +25,7 @@ public class SitesList {
     public List<SiteDAO> getAllSites() {
         List<SiteDAO> sites = new ArrayList<>();
         Iterable<SiteDAO> siteIterable = siteRepository.findAll();
-        for(SiteDAO siteDAO:siteIterable){
-            sites.add(siteDAO);
-        }
+        siteIterable.forEach(sites::add);
         return sites;
     }
 }

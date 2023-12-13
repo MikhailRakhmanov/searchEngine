@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "pages",indexes = @Index(columnList="path"))
+@Table(name = "pages",indexes = {@Index(name = "path_index", columnList="path")})
 @Getter
 @Setter
 public class PageDAO implements Serializable {
@@ -29,7 +29,7 @@ public class PageDAO implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "site_id", referencedColumnName = "id")
     SiteDAO site;
-    @Column(columnDefinition = "TEXT NOT NULL")
+    @Column(columnDefinition = "VARCHAR(512) NOT NULL",length = 10)
     String path;
     @Column(columnDefinition = "INT NOT NULL")
     int code;
