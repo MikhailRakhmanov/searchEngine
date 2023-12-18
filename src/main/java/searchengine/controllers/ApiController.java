@@ -78,6 +78,19 @@ public class ApiController {
     private boolean stopIndexing(){
         return true;
     }
+    @GetMapping("/search")
+    private boolean search(String query,String site,Integer offset, Integer limit){
+        return false;
+    }
+    @GetMapping("/search")
+    private boolean search(String query,String site, Integer limit){
+        return false;
+    }
+    @GetMapping("/search")
+    private boolean search(String query,String site){
+        return false;
+    }
+
 
 
 }
